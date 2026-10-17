@@ -34,9 +34,9 @@ days:
       - key: accessory_1
         role: accessory
         pattern: "Push · Vertical"
-        name: "Seated overhead press"
-        wger_name: "Shoulder Press (Dumbbell)"
-        wger_exercise_id: 1337
+        name: "Seated barbell press"
+        wger_name: "Shoulder Press, Barbell"
+        wger_exercise_id: 566
         kind: flat
         flat: "3x8-10 @7"
         repeat: true
@@ -51,21 +51,21 @@ days:
         repeat: true
       - key: accessory_3
         role: accessory
-        pattern: "Pull · Horizontal"
-        name: "Band pull-apart"
-        wger_name: "Band pull-aparts"
-        wger_exercise_id: 1380
-        kind: flat
-        flat: "3x10-15 @7"
-        repeat: true
-      - key: accessory_4
-        role: accessory
         pattern: "Arm · Curl"
         name: "Barbell curl"
         wger_name: "Biceps Curls With Barbell"
         wger_exercise_id: 91
         kind: flat
         flat: "3x8-12 @7"
+        repeat: true
+      - key: accessory_4
+        role: accessory
+        pattern: "Pull · Horizontal"
+        name: "Band pull-apart"
+        wger_name: "Band pull-aparts"
+        wger_exercise_id: 1380
+        kind: flat
+        flat: "3x10-15 @7"
         repeat: true
 
   - id: day2_push

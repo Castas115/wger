@@ -13,6 +13,7 @@ spec:
       labels:
         app: wger-celery-worker
     spec:
+      enableServiceLinks: false
       containers:
         - name: celery-worker
           image: wger/server:latest
@@ -45,6 +46,7 @@ spec:
       labels:
         app: wger-celery-beat
     spec:
+      enableServiceLinks: false
       containers:
         - name: celery-beat
           image: wger/server:latest

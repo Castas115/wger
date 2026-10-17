@@ -19,6 +19,7 @@ data:
   CELERY_WORKER_CONCURRENCY: "2"
   DJANGO_CACHE_BACKEND: "django_redis.cache.RedisCache"
   DJANGO_CACHE_LOCATION: "redis://wger-redis:6379/1"
+  DJANGO_CACHE_CLIENT_CLASS: "django_redis.client.DefaultClient"
   SYNC_EXERCISES_CELERY: "True"
   SYNC_EXERCISE_IMAGES_CELERY: "True"
   SYNC_EXERCISE_VIDEOS_CELERY: "True"

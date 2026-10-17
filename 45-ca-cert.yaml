@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wger-ca-cert
+  namespace: wger
+data:
+  home-ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIBaTCCAQ6gAwIBAgIUIkZtfVC8bKV3mbb2rCIcw+og2X0wCgYIKoZIzj0EAwIw
+    EjEQMA4GA1UEAxMHaG9tZS1jYTAeFw0yNjEwMDQxMjIxNTlaFw0zNjEwMDExMjIx
+    NTlaMBIxEDAOBgNVBAMTB2hvbWUtY2EwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNC
+    AARC3JxB0UUcl0b2wPCKsjeVKEfTwi4aN1/TNauBSZZK2P0OXqxZmW827ZUJOhak
+    64u5CpS/uH/ip7uf4VuVQ2Aao0IwQDAOBgNVHQ8BAf8EBAMCAqQwDwYDVR0TAQH/
+    BAUwAwEB/zAdBgNVHQ4EFgQUOwwDrJK+DYbJDMT8BJM9aXRm6G8wCgYIKoZIzj0E
+    AwIDSQAwRgIhALw55botXnBv4VcEJ4ZPdk72gt9olu769y5uynqAHDOZAiEA3Wpq
+    d1N8Ulmu3Zx/15r/SlNXVZwfEEqpPzQMlK2ejTk=
+    -----END CERTIFICATE-----

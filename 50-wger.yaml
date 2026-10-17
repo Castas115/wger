@@ -16,15 +16,29 @@ spec:
         app: wger
     spec:
       enableServiceLinks: false
+      initContainers:
+        - name: ca-bundle
+          image: wger/server:latest
+          command: ["sh", "-c"]
+          args:
+            - |
+              python3 -c "import certifi; print(certifi.where())" > /tmp/certifi-path
+              cat "$(cat /tmp/certifi-path)" /ca-source/home-ca.crt > /ca-bundle/cacert.pem
+          volumeMounts:
+            - { name: ca-source, mountPath: /ca-source, readOnly: true }
+            - { name: ca-bundle, mountPath: /ca-bundle }
       containers:
         - name: web
           image: wger/server:latest
           envFrom:
             - configMapRef: { name: wger-config }
             - secretRef: { name: wger-secrets }
+          env:
+            - { name: REQUESTS_CA_BUNDLE, value: /ca-bundle/cacert.pem }
           volumeMounts:
             - { name: static, mountPath: /home/wger/static }
             - { name: media, mountPath: /home/wger/media }
+            - { name: ca-bundle, mountPath: /ca-bundle, readOnly: true }
           resources:
             requests: { cpu: 200m, memory: 256Mi }
             limits: { memory: 1Gi }
@@ -39,6 +53,10 @@ spec:
             limits: { memory: 128Mi }
       volumes:
         - { name: static, emptyDir: {} }
+        - { name: ca-bundle, emptyDir: {} }
+        - name: ca-source
+          configMap:
+            name: wger-ca-cert
         - name: media
           persistentVolumeClaim:
             claimName: wger-media

@@ -10,5 +10,6 @@ resources:
   - 30-postgres.yaml
   - 35-redis.yaml
   - 40-nginx-conf.yaml
+  - 45-ca-cert.yaml
   - 50-wger.yaml
   - 60-celery.yaml

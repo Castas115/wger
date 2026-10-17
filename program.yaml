@@ -122,9 +122,9 @@ days:
       - key: accessory_2
         role: accessory
         pattern: "Arm · Push"
-        name: "Lying triceps extension"
-        wger_name: "Lying Triceps Extensions"
-        wger_exercise_id: 1480
+        name: "Overhead triceps extension"
+        wger_name: "Overhead Triceps Extension"
+        wger_exercise_id: 1519
         kind: flat
         flat: "3x8-12 @7"
         repeat: true
@@ -185,15 +185,6 @@ days:
         name: "DB hammer curl"
         wger_name: "Hammer Curl"
         wger_exercise_id: 1932
-        kind: flat
-        flat: "3x8-12 @7"
-        repeat: true
-      - key: arms_triceps
-        role: accessory
-        pattern: "Arm · Push"
-        name: "Overhead triceps extension"
-        wger_name: "Overhead Triceps Extension"
-        wger_exercise_id: 1519
         kind: flat
         flat: "3x8-12 @7"
         repeat: true

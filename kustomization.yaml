@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: wger
+
+resources:
+  - 10-storage.yaml
+  - 15-config.yaml
+  - 20-secrets-sealed.yaml
+  - 30-postgres.yaml
+  - 35-redis.yaml
+  - 40-nginx-conf.yaml
+  - 50-wger.yaml
+  - 60-celery.yaml

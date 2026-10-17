@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wger-postgres
+  namespace: wger
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: wger-postgres
+  template:
+    metadata:
+      labels:
+        app: wger-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          env:
+            - { name: POSTGRES_USER, valueFrom: { configMapKeyRef: { name: wger-config, key: POSTGRES_USER } } }
+            - { name: POSTGRES_DB, valueFrom: { configMapKeyRef: { name: wger-config, key: POSTGRES_DB } } }
+            - { name: POSTGRES_PASSWORD, valueFrom: { secretKeyRef: { name: wger-secrets, key: POSTGRES_PASSWORD } } }
+          volumeMounts:
+            - { name: data, mountPath: /var/lib/postgresql/data }
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { memory: 768Mi }
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wger-postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wger-postgres
+  namespace: wger
+spec:
+  selector:
+    app: wger-postgres
+  ports:
+    - { port: 5432, targetPort: 5432 }

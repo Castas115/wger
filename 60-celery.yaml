@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wger-celery-worker
+  namespace: wger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wger-celery-worker
+  template:
+    metadata:
+      labels:
+        app: wger-celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: wger/server:latest
+          command: ["/start-worker"]
+          envFrom:
+            - configMapRef: { name: wger-config }
+            - secretRef: { name: wger-secrets }
+          volumeMounts:
+            - { name: media, mountPath: /home/wger/media }
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { memory: 512Mi }
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: wger-media
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wger-celery-beat
+  namespace: wger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wger-celery-beat
+  template:
+    metadata:
+      labels:
+        app: wger-celery-beat
+    spec:
+      containers:
+        - name: celery-beat
+          image: wger/server:latest
+          command: ["/start-beat"]
+          envFrom:
+            - configMapRef: { name: wger-config }
+            - secretRef: { name: wger-secrets }
+          volumeMounts:
+            - { name: beat, mountPath: /home/wger/beat }
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 256Mi }
+      volumes:
+        - { name: beat, emptyDir: {} }

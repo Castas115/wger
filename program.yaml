@@ -1,0 +1,256 @@
+# Fuente única de verdad del programa. routine.html se genera desde este
+# archivo (scripts/render_routine.py) y wger se puebla desde este archivo
+# (scripts/import_wger_routine.py). No edites routine.html a mano.
+#
+# routine.fit_in_week=true -> cada "day" de abajo se repite 1x por semana
+# calendario, así que 1 iteration de wger = 1 semana = 1 fila Wn aquí.
+# iteration global = (block_index-1)*4 + week_index  (B1W1=1 ... B5W4=20)
+#
+# Notación celda: "sets x reps @ rpe". rpe -> RiR en wger (RiR = 10 - RPE).
+# "reps" puede ser rango "8-10" -> value/max_value en RepetitionsConfig.
+#
+# kind: main   -> dos slots (top_set + backoff), mismo ejercicio, mismo día
+# kind: work   -> un slot, progresión por bloque (campo "blocks.*.work")
+# kind: flat   -> un slot, mismo sets/reps/rpe toda la rutina (repeat=true)
+#
+# wger_exercise_id = id de "exercise" (no translation id) resuelto contra
+# https://wger.lan.home/api/v2/exercise-translation/?name=<wger_name>&language=2
+
+routine:
+  name: "Pull/Bench 4-Day Block"
+  description: "Pull/Bench mains + Squat/Hinge legs, accessories spread across days"
+  start_date: "2026-10-17"
+  duration_weeks: 20
+  fit_in_week: true
+
+days:
+  - id: day1_pull
+    order: 1
+    label: "Pull"
+    focus: "Vertical pull strength"
+    exercises:
+      - key: main_lift
+        role: main
+        pattern: "Pull · Vertical"
+        name: "Pull-up"
+        wger_name: "Pull ups"
+        wger_exercise_id: 475
+        kind: main
+        blocks:
+          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" } }
+          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" } }
+          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" } }
+          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" } }
+          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" } }
+      - key: accessory_1
+        role: accessory
+        pattern: "Push · Vertical"
+        name: "Seated overhead press"
+        wger_name: "Shoulder Press (Dumbbell)"
+        wger_exercise_id: 1337
+        kind: flat
+        flat: "3x8-10 @7"
+        repeat: true
+      - key: accessory_2
+        role: accessory
+        pattern: "Pull · Horizontal"
+        name: "Pullover"
+        wger_name: "Pullover"
+        wger_exercise_id: 1273
+        kind: flat
+        flat: "3x10-12 @7"
+        repeat: true
+      - key: accessory_3
+        role: accessory
+        pattern: "Pull · Horizontal"
+        name: "Band pull-apart"
+        wger_name: "Band pull-aparts"
+        wger_exercise_id: 1380
+        kind: flat
+        flat: "3x10-15 @7"
+        repeat: true
+      - key: accessory_4
+        role: accessory
+        pattern: "Arm · Curl"
+        name: "Barbell curl"
+        wger_name: "Biceps Curls With Barbell"
+        wger_exercise_id: 91
+        kind: flat
+        flat: "3x8-12 @7"
+        repeat: true
+
+  - id: day2_push
+    order: 2
+    label: "Bench"
+    focus: "Horizontal press strength + back width"
+    exercises:
+      - key: main_lift
+        role: main
+        pattern: "Push · Horizontal"
+        name: "Bench press"
+        wger_name: "Bench Press"
+        wger_exercise_id: 73
+        kind: main
+        blocks:
+          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" } }
+          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" } }
+          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" } }
+          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" } }
+          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" } }
+      - key: assist_1
+        role: assist
+        pattern: "Pull · Vertical"
+        name: "Wide neutral-grip lat pulldown"
+        wger_name: "Neutral Grip Lat Pulldown"
+        wger_exercise_id: 1510
+        kind: work
+        blocks:
+          B1: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B2: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B3: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B4: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B5: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+      - key: accessory_1
+        role: accessory
+        pattern: "Push · Vertical"
+        name: "Lateral raise"
+        wger_name: "Lateral Raises"
+        wger_exercise_id: 348
+        kind: flat
+        flat: "3x12-15 @7"
+        repeat: true
+      - key: accessory_2
+        role: accessory
+        pattern: "Arm · Push"
+        name: "Lying triceps extension"
+        wger_name: "Lying Triceps Extensions"
+        wger_exercise_id: 1480
+        kind: flat
+        flat: "3x8-12 @7"
+        repeat: true
+
+  - id: day3_legs_a
+    order: 3
+    label: "Legs A · Squat"
+    focus: "Quad-dominant + unilateral hinge + pull/press accessory"
+    exercises:
+      - key: main
+        role: main
+        pattern: "Leg"
+        name: "Front squat"
+        wger_name: "Front Squats"
+        wger_exercise_id: 257
+        kind: flat
+        flat: "4x5-8 @7"
+        repeat: true
+      - key: rdl_unilateral
+        role: assist
+        pattern: "Hinge"
+        name: "Single-leg Romanian deadlift"
+        wger_name: "Single Leg RDL"
+        wger_exercise_id: 1388
+        kind: flat
+        flat: "3x8-10 @7"
+        unilateral: leg
+        repeat: true
+      - key: assist_1
+        role: assist
+        pattern: "Pull · Vertical"
+        name: "Chin-up"
+        wger_name: "Chin-ups"
+        wger_exercise_id: 154
+        kind: work
+        blocks:
+          B1: { work: { W1: "2x8-10 @7", W2: "3x8-10 @8", W3: "3x8-10 @8", W4: "3x8-10 @8" } }
+          B2: { work: { W1: "3x7-9 @7",  W2: "4x7-9 @8",  W3: "4x7-9 @8",  W4: "4x7-9 @8" } }
+          B3: { work: { W1: "3x6-8 @7",  W2: "4x6-8 @8",  W3: "4x6-8 @8",  W4: "4x6-8 @8" } }
+          B4: { work: { W1: "4x5-7 @7",  W2: "5x5-7 @8",  W3: "5x5-7 @8",  W4: "5x5-7 @8" } }
+          B5: { work: { W1: "4x8 @7",    W2: "5x7 @8",    W3: "5x6 @8",    W4: "5x5 @8" } }
+      - key: assist_2
+        role: assist
+        pattern: "Push · Horizontal"
+        name: "DB incline bench press"
+        wger_name: "Incline Bench Press - Dumbbell"
+        wger_exercise_id: 537
+        kind: work
+        blocks:
+          B1: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B2: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B3: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B4: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+          B5: { work: { W1: "2x9-15 @7", W2: "3x9-15 @8", W3: "3x9-15 @8", W4: "3x9-15 @8" } }
+      - key: arms_biceps
+        role: accessory
+        pattern: "Arm · Curl"
+        name: "DB hammer curl"
+        wger_name: "Hammer Curl"
+        wger_exercise_id: 1932
+        kind: flat
+        flat: "3x8-12 @7"
+        repeat: true
+      - key: arms_triceps
+        role: accessory
+        pattern: "Arm · Push"
+        name: "Overhead triceps extension"
+        wger_name: "Overhead Triceps Extension"
+        wger_exercise_id: 1519
+        kind: flat
+        flat: "3x8-12 @7"
+        repeat: true
+
+  - id: day4_legs_b
+    order: 4
+    label: "Legs B · Hinge"
+    focus: "Posterior-dominant + lunges + press accessory + arms"
+    exercises:
+      - key: main
+        role: main
+        pattern: "Hinge"
+        name: "Romanian deadlift"
+        wger_name: "Romanian Deadlift"
+        wger_exercise_id: 507
+        kind: flat
+        flat: "3x6-8 @7"
+        repeat: true
+      - key: lunges
+        role: assist
+        pattern: "Leg"
+        name: "Walking lunge"
+        wger_name: "Walking Lunges"
+        wger_exercise_id: 1903
+        kind: flat
+        flat: "3x10-12 @7"
+        unilateral: leg
+        repeat: true
+      - key: assist_1
+        role: assist
+        pattern: "Push · Vertical"
+        name: "Dip"
+        wger_name: "Dips"
+        wger_exercise_id: 194
+        kind: work
+        blocks:
+          B1: { work: { W1: "2x8-10 @7", W2: "3x8-10 @8", W3: "3x8-10 @8", W4: "3x8-10 @8" } }
+          B2: { work: { W1: "3x7-9 @7",  W2: "4x7-9 @8",  W3: "4x7-9 @8",  W4: "4x7-9 @8" } }
+          B3: { work: { W1: "3x6-8 @7",  W2: "4x6-8 @8",  W3: "4x6-8 @8",  W4: "4x6-8 @8" } }
+          B4: { work: { W1: "4x5-7 @7",  W2: "5x5-7 @8",  W3: "5x5-7 @8",  W4: "5x5-7 @8" } }
+          B5: { work: { W1: "4x8 @7",    W2: "5x7 @8",    W3: "5x6 @8",    W4: "5x5 @8" } }
+      - key: row
+        role: accessory
+        pattern: "Pull · Horizontal"
+        name: "1-arm dumbbell row"
+        wger_name: "Single arm row"
+        wger_exercise_id: 1637
+        kind: flat
+        flat: "3x8-12 @7"
+        unilateral: arm
+        repeat: true
+      - key: arms_triceps
+        role: accessory
+        pattern: "Arm · Push"
+        name: "Triceps pushdown"
+        wger_name: "Triceps Pushdown"
+        wger_exercise_id: 1185
+        kind: flat
+        flat: "3x10-12 @7"
+        repeat: true

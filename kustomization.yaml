@@ -15,3 +15,9 @@ resources:
   - 55-powersync-config.yaml
   - 56-powersync.yaml
   - 60-celery.yaml
+  - 70-routine-site.yaml
+
+configMapGenerator:
+  - name: workout-routine-html
+    files:
+      - routine.html

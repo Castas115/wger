@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Split</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f5f3ef; --surface:#ffffff; --surface-2:#ececE4; --ink:#1c1a17; --ink-dim:#6b6558;
+  --rule:#ddd8cd; --accent:#c4531d; --assist:#2f6f6b; --acc2:#8a7a3f; --acc3:#5a5f8a;
+  --pat-push:#c4531d; --pat-pull:#2f6f6b; --pat-leg:#8a7a3f; --pat-hinge:#5a5f8a; --pat-arm:#9c4a76; --pat-core:#6b6558;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Oswald',sans-serif; --body:'Inter',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#15130f; --surface:#1e1b16; --surface-2:#262219; --ink:#f1ede4; --ink-dim:#a39b89;
+    --rule:#352f24; --accent:#e37a3a; --assist:#5fb3ac; --acc2:#c9b05f; --acc3:#8c91c2;
+    --pat-push:#e37a3a; --pat-pull:#5fb3ac; --pat-leg:#c9b05f; --pat-hinge:#8c91c2; --pat-arm:#d980ae; --pat-core:#a39b89;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);padding:0 16px 40px}
+h1,h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;margin:0}
+.wrap{max-width:1180px;margin:0 auto}
+header{padding:26px 0 18px}
+header .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+header h1{font-size:clamp(24px,4vw,34px);margin-top:4px}
+header p{margin:6px 0 0;color:var(--ink-dim);font-size:13px;max-width:70ch}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+
+.day{background:var(--surface);border:1px solid var(--rule);border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.day-head{padding:14px 16px;border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.day-head .num{font-family:var(--mono);font-size:11px;color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase}
+.day-head h2{font-size:17px;margin-top:2px}
+.day-head .focus{font-size:12px;color:var(--ink-dim);margin-top:2px}
+
+.exlist{list-style:none;margin:0;padding:8px 0;flex:1}
+.ex{border-bottom:1px solid var(--rule)}
+.ex:not(details){padding:9px 16px;display:flex;flex-direction:column;gap:2px}
+.exlist li:last-child .ex{border-bottom:none}
+.ex.main{border-left:3px solid var(--accent)}
+.ex.assist{border-left:3px solid var(--assist)}
+.ex.accessory{border-left:3px solid var(--acc2)}
+.ex .pattern{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-dim)}
+.ex .pattern.pat-push{color:var(--pat-push)}
+.ex .pattern.pat-pull{color:var(--pat-pull)}
+.ex .pattern.pat-leg{color:var(--pat-leg)}
+.ex .pattern.pat-hinge{color:var(--pat-hinge)}
+.ex .pattern.pat-arm{color:var(--pat-arm)}
+.ex .pattern.pat-core{color:var(--pat-core)}
+.ex .name{font-size:13.5px;font-weight:500}
+.ex .spec{font-family:var(--mono);font-size:12px;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0 18px;font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.legend i.main{background:var(--accent)}
+.legend i.assist{background:var(--assist)}
+.legend i.accessory{background:var(--acc2)}
+
+.ex[open]{background:var(--surface-2)}
+.ex summary{list-style:none;cursor:pointer;padding:9px 16px;display:flex;align-items:center;gap:10px}
+.ex summary::-webkit-details-marker{display:none}
+.ex summary .fields{display:flex;flex-direction:column;gap:2px;flex:1}
+.ex summary .chev{font-family:var(--mono);font-size:11px;color:var(--ink-dim);transition:transform .15s}
+.ex[open] summary .chev{transform:rotate(90deg)}
+.prog{padding:0 16px 10px}
+.prog table{border-collapse:collapse;width:100%}
+.prog th,.prog td{font-family:var(--mono);font-size:10.5px;padding:3px 5px;text-align:left;white-space:nowrap;font-variant-numeric:tabular-nums}
+.prog th{color:var(--ink-dim);font-weight:500;text-transform:uppercase;letter-spacing:.04em;font-size:9px}
+.prog td.blk{color:var(--ink-dim);font-family:var(--body)}
+.prog tr+tr td{border-top:1px solid var(--rule)}
+
+footer{margin-top:28px;color:var(--ink-dim);font-size:11px;font-family:var(--mono);border-top:1px solid var(--rule);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">weekly structure</div>
+    <h1>4-day split</h1>
+    <p id="subhead"></p>
+  </header>
+
+  <div class="legend">
+    <span><i class="main"></i>Main lift</span>
+    <span><i class="assist"></i>Assist</span>
+    <span><i class="accessory"></i>Accessory</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>wger routine · 4 days/week · iteration = 1 week</footer>
+</div>
+
+<script>
+const ROUTINE_NAME = "4-Day Strength Block (Pull/Bench mains + Squat/Hinge legs, accessories spread across days)";
+const START_DATE = "2026-10-17";
+const DURATION_WEEKS = 20;
+const DAYS = [
+  {
+    "num": "Day 1",
+    "name": "Pull",
+    "focus": "Vertical pull strength",
+    "exercises": [
+      {
+        "role": "main",
+        "pattern": "Pull · Vertical",
+        "name": "Pull-up",
+        "spec": "1×5 top + 2×8 backoff @6.5",
+        "kind": "main",
+        "blocks": {
+          "B1": {
+            "top_set": {
+              "W1": "1x5 @6.5",
+              "W2": "1x5 @7",
+              "W3": "1x5 @8",
+              "W4": "1x5 @10"
+            },
+            "backoff": {
+              "W1": "2x8 @6.5",
+              "W2": "3x8 @7",
+              "W3": "3x8 @8",
+              "W4": "3x8 @10"
+            }
+          },
+          "B2": {
+            "top_set": {
+              "W1": "1x4 @6.5",
+              "W2": "1x4 @7",
+              "W3": "1x4 @8",
+              "W4": "1x4 @10"
+            },
+            "backoff": {
+              "W1": "2x7 @6.5",
+              "W2": "3x7 @7",
+              "W3": "3x7 @8",
+              "W4": "3x7 @10"
+            }
+          },
+          "B3": {
+            "top_set": {
+              "W1": "1x3 @6.5",
+              "W2": "1x3 @7",
+              "W3": "1x3 @8",
+              "W4": "1x3 @10"
+            },
+            "backoff": {
+              "W1": "2x6 @6.5",
+              "W2": "3x6 @7",
+              "W3": "3x6 @8",
+              "W4": "3x6 @10"
+            }
+          },
+          "B4": {
+            "top_set": {
+              "W1": "1x2 @6.5",
+              "W2": "1x2 @7",
+              "W3": "1x2 @8",
+              "W4": "1x2 @10"
+            },
+            "backoff": {
+              "W1": "2x5 @6.5",
+              "W2": "3x5 @7",
+              "W3": "3x5 @8",
+              "W4": "3x5 @10"
+            }
+          },
+          "B5": {
+            "top_set": {
+              "W1": "1x3 @6.5",
+              "W2": "1x2 @7",
+              "W3": "1x1 @8",
+              "W4": "1x1 @10"
+            },
+            "backoff": {
+              "W1": "2x5 @6.5",
+              "W2": "3x4 @7",
+              "W3": "3x3 @8",
+              "W4": "3x2 @10"
+            }
+          }
+        }
+      },
+      {
+        "role": "accessory",
+        "pattern": "Push · Vertical",
+        "name": "Seated overhead press",
+        "spec": "3×8–10"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Pull · Horizontal",
+        "name": "Pullover",
+        "spec": "3×10–12"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Pull · Horizontal",
+        "name": "Band pull-apart",
+        "spec": "3×10–15"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Arm · Curl",
+        "name": "Barbell curl",
+        "spec": "3×8–12"
+      }
+    ]
+  },
+  {
+    "num": "Day 2",
+    "name": "Bench",
+    "focus": "Horizontal press strength + back width",
+    "exercises": [
+      {
+        "role": "main",
+        "pattern": "Push · Horizontal",
+        "name": "Bench press",
+        "spec": "1×5 top + 2×8 backoff @6.5",
+        "kind": "main",
+        "blocks": {
+          "B1": {
+            "top_set": {
+              "W1": "1x5 @6.5",
+              "W2": "1x5 @7",
+              "W3": "1x5 @8",
+              "W4": "1x5 @10"
+            },
+            "backoff": {
+              "W1": "2x8 @6.5",
+              "W2": "3x8 @7",
+              "W3": "3x8 @8",
+              "W4": "3x8 @10"
+            }
+          },
+          "B2": {
+            "top_set": {
+              "W1": "1x4 @6.5",
+              "W2": "1x4 @7",
+              "W3": "1x4 @8",
+              "W4": "1x4 @10"
+            },
+            "backoff": {
+              "W1": "2x7 @6.5",
+              "W2": "3x7 @7",
+              "W3": "3x7 @8",
+              "W4": "3x7 @10"
+            }
+          },
+          "B3": {
+            "top_set": {
+              "W1": "1x3 @6.5",
+              "W2": "1x3 @7",
+              "W3": "1x3 @8",
+              "W4": "1x3 @10"
+            },
+            "backoff": {
+              "W1": "2x6 @6.5",
+              "W2": "3x6 @7",
+              "W3": "3x6 @8",
+              "W4": "3x6 @10"
+            }
+          },
+          "B4": {
+            "top_set": {
+              "W1": "1x2 @6.5",
+              "W2": "1x2 @7",
+              "W3": "1x2 @8",
+              "W4": "1x2 @10"
+            },
+            "backoff": {
+              "W1": "2x5 @6.5",
+              "W2": "3x5 @7",
+              "W3": "3x5 @8",
+              "W4": "3x5 @10"
+            }
+          },
+          "B5": {
+            "top_set": {
+              "W1": "1x3 @6.5",
+              "W2": "1x2 @7",
+              "W3": "1x1 @8",
+              "W4": "1x1 @10"
+            },
+            "backoff": {
+              "W1": "2x5 @6.5",
+              "W2": "3x4 @7",
+              "W3": "3x3 @8",
+              "W4": "3x2 @10"
+            }
+          }
+        }
+      },
+      {
+        "role": "assist",
+        "pattern": "Pull · Vertical",
+        "name": "Wide neutral-grip lat pulldown",
+        "spec": "2×9–15 @7",
+        "kind": "work",
+        "blocks": {
+          "B1": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B2": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B3": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B4": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B5": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          }
+        }
+      },
+      {
+        "role": "accessory",
+        "pattern": "Push · Vertical",
+        "name": "Lateral raise",
+        "spec": "3×12–15"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Arm · Push",
+        "name": "Lying triceps extension",
+        "spec": "3×8–12"
+      }
+    ]
+  },
+  {
+    "num": "Day 3",
+    "name": "Legs A · Squat",
+    "focus": "Quad-dominant + unilateral hinge + pull/press accessory",
+    "exercises": [
+      {
+        "role": "main",
+        "pattern": "Leg",
+        "name": "Front squat",
+        "spec": "4×5–8"
+      },
+      {
+        "role": "assist",
+        "pattern": "Hinge",
+        "name": "Single-leg Romanian deadlift",
+        "spec": "3×8–10 /leg"
+      },
+      {
+        "role": "assist",
+        "pattern": "Pull · Vertical",
+        "name": "Chin-up",
+        "spec": "2×8–10 @7",
+        "kind": "work",
+        "blocks": {
+          "B1": {
+            "work": {
+              "W1": "2x8-10 @7",
+              "W2": "3x8-10 @8",
+              "W3": "3x8-10 @8",
+              "W4": "3x8-10 @8"
+            }
+          },
+          "B2": {
+            "work": {
+              "W1": "3x7-9 @7",
+              "W2": "4x7-9 @8",
+              "W3": "4x7-9 @8",
+              "W4": "4x7-9 @8"
+            }
+          },
+          "B3": {
+            "work": {
+              "W1": "3x6-8 @7",
+              "W2": "4x6-8 @8",
+              "W3": "4x6-8 @8",
+              "W4": "4x6-8 @8"
+            }
+          },
+          "B4": {
+            "work": {
+              "W1": "4x5-7 @7",
+              "W2": "5x5-7 @8",
+              "W3": "5x5-7 @8",
+              "W4": "5x5-7 @8"
+            }
+          },
+          "B5": {
+            "work": {
+              "W1": "4x8 @7",
+              "W2": "5x7 @8",
+              "W3": "5x6 @8",
+              "W4": "5x5 @8"
+            }
+          }
+        }
+      },
+      {
+        "role": "assist",
+        "pattern": "Push · Horizontal",
+        "name": "DB incline bench press",
+        "spec": "2×9–15 @7",
+        "kind": "work",
+        "blocks": {
+          "B1": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B2": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B3": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B4": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          },
+          "B5": {
+            "work": {
+              "W1": "2x9-15 @7",
+              "W2": "3x9-15 @8",
+              "W3": "3x9-15 @8",
+              "W4": "3x9-15 @8"
+            }
+          }
+        }
+      },
+      {
+        "role": "accessory",
+        "pattern": "Arm · Curl",
+        "name": "DB hammer curl",
+        "spec": "3×8–12"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Arm · Push",
+        "name": "Overhead triceps extension",
+        "spec": "3×8–12"
+      }
+    ]
+  },
+  {
+    "num": "Day 4",
+    "name": "Legs B · Hinge",
+    "focus": "Posterior-dominant + lunges + press accessory + arms",
+    "exercises": [
+      {
+        "role": "main",
+        "pattern": "Hinge",
+        "name": "Romanian deadlift",
+        "spec": "3×6–8"
+      },
+      {
+        "role": "assist",
+        "pattern": "Leg",
+        "name": "Walking lunge",
+        "spec": "3×10–12 /leg"
+      },
+      {
+        "role": "assist",
+        "pattern": "Push · Vertical",
+        "name": "Dip",
+        "spec": "2×8–10 @7",
+        "kind": "work",
+        "blocks": {
+          "B1": {
+            "work": {
+              "W1": "2x8-10 @7",
+              "W2": "3x8-10 @8",
+              "W3": "3x8-10 @8",
+              "W4": "3x8-10 @8"
+            }
+          },
+          "B2": {
+            "work": {
+              "W1": "3x7-9 @7",
+              "W2": "4x7-9 @8",
+              "W3": "4x7-9 @8",
+              "W4": "4x7-9 @8"
+            }
+          },
+          "B3": {
+            "work": {
+              "W1": "3x6-8 @7",
+              "W2": "4x6-8 @8",
+              "W3": "4x6-8 @8",
+              "W4": "4x6-8 @8"
+            }
+          },
+          "B4": {
+            "work": {
+              "W1": "4x5-7 @7",
+              "W2": "5x5-7 @8",
+              "W3": "5x5-7 @8",
+              "W4": "5x5-7 @8"
+            }
+          },
+          "B5": {
+            "work": {
+              "W1": "4x8 @7",
+              "W2": "5x7 @8",
+              "W3": "5x6 @8",
+              "W4": "5x5 @8"
+            }
+          }
+        }
+      },
+      {
+        "role": "accessory",
+        "pattern": "Pull · Horizontal",
+        "name": "1-arm dumbbell row",
+        "spec": "3×8–12 /arm"
+      },
+      {
+        "role": "accessory",
+        "pattern": "Arm · Push",
+        "name": "Triceps pushdown",
+        "spec": "3×10–12"
+      }
+    ]
+  }
+];
+
+document.getElementById('subhead').textContent =
+  `${ROUTINE_NAME} · ${DURATION_WEEKS} weeks starting ${START_DATE}. Sets × reps shown is block 1 / week 1 (lightest). Main lifts progress B1→B5; assists ramp volume; accessories stay flat all cycle.`;
+
+function rpeClass(cell){
+  const m = cell.match(/@([\d.]+)/);
+  if(!m) return '';
+  const v = parseFloat(m[1]);
+  if(v>=10) return 'r10';
+  if(v>=8) return 'r8';
+  if(v>=7) return 'r7';
+  return 'r65';
+}
+function fmtCell(cell){
+  const m = cell.match(/^(.*)@([\d.]+)$/);
+  if(!m) return cell;
+  return `${m[1].trim()}<span class="rpe ${rpeClass(cell)}">@${m[2]}</span>`;
+}
+function patClass(pattern){
+  return 'pat-' + pattern.split(' ')[0].toLowerCase();
+}
+
+function progTable(e){
+  const weeks = ['W1','W2','W3','W4'];
+  const rows = Object.entries(e.blocks).map(([bk,b]) => {
+    const cell = e.kind === "main"
+      ? weeks.map(w => `<td>${b.top_set[w].split(' @')[0]}<br>${b.backoff[w]}</td>`).join('')
+      : weeks.map(w => `<td>${b.work[w]}</td>`).join('');
+    return `<tr><td class="blk">${bk}</td>${cell}</tr>`;
+  }).join('');
+  return `<table><thead><tr><th>Blk</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+const grid = document.getElementById('grid');
+DAYS.forEach(day => {
+  const col = document.createElement('div');
+  col.className = 'day';
+  col.innerHTML = `
+    <div class="day-head">
+      <div class="num">${day.num}</div>
+      <h2>${day.name}</h2>
+      <div class="focus">${day.focus}</div>
+    </div>
+    <ul class="exlist">
+      ${day.exercises.map(e => e.blocks ? `
+        <li><details class="ex ${e.role}">
+          <summary>
+            <span class="fields">
+              <span class="pattern ${patClass(e.pattern)}">${e.pattern}</span>
+              <span class="name">${e.name}</span>
+              <span class="spec">${e.spec}</span>
+            </span>
+            <span class="chev">▸</span>
+          </summary>
+          <div class="prog">${progTable(e)}</div>
+        </details></li>
+      ` : `
+        <li><div class="ex ${e.role}">
+          <span class="pattern ${patClass(e.pattern)}">${e.pattern}</span>
+          <span class="name">${e.name}</span>
+          <span class="spec">${e.spec}</span>
+        </div></li>
+      `).join('')}
+    </ul>`;
+  grid.appendChild(col);
+});
+</script>
+</body>
+</html>

@@ -128,7 +128,11 @@ function progTable(e){
   const weeks = ['W1','W2','W3','W4'];
   const rows = Object.entries(e.blocks).map(([bk,b]) => {
     const cell = e.kind === "main"
-      ? weeks.map(w => `<td>${b.top_set[w].split(' @')[0]}<br>${b.backoff[w]}</td>`).join('')
+      ? weeks.map(w => {
+          const topW = b.top_set_weight && b.top_set_weight[w] != null ? ` · ${b.top_set_weight[w]}kg` : '';
+          const backW = b.backoff_weight && b.backoff_weight[w] != null ? ` · ${b.backoff_weight[w]}kg` : '';
+          return `<td>${b.top_set[w].split(' @')[0]}${topW}<br>${b.backoff[w]}${backW}</td>`;
+        }).join('')
       : weeks.map(w => `<td>${b.work[w]}</td>`).join('');
     return `<tr><td class="blk">${bk}</td>${cell}</tr>`;
   }).join('');

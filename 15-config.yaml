@@ -9,6 +9,7 @@ data:
   TZ: "Europe/Madrid"
   ALLOW_REGISTRATION: "True"
   ALLOW_GUEST_USERS: "False"
+  WGER_SOCIAL_PROVIDERS: "openid_connect"
   DJANGO_DEBUG: "False"
   WGER_USE_GUNICORN: "True"
   DJANGO_PERFORM_MIGRATIONS: "True"

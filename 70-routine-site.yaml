@@ -1,7 +1,4 @@
-# Serves routine.html (generated from program.yaml via scripts/render_routine.py)
-# as a static page. The ConfigMap is built from routine.html by kustomize's
-# configMapGenerator below, so every commit that changes routine.html gets a
-# new ConfigMap hash -> new rollout, automatically, on the next ArgoCD sync.
+# Static page serving routine.html; configMapGenerator hash change triggers a rollout.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -67,7 +67,7 @@ class WgerClient:
             raise
 
 
-def push_set_configs(client, slot_entry_id, iteration, sets, reps_lo, reps_hi, rir, repeat):
+def push_set_configs(client, slot_entry_id, iteration, sets, reps_lo, reps_hi, rir, repeat, weight=None):
     client.post("sets-config", {
         "slot_entry": slot_entry_id, "iteration": iteration, "value": sets, "repeat": repeat,
     })
@@ -81,6 +81,10 @@ def push_set_configs(client, slot_entry_id, iteration, sets, reps_lo, reps_hi, r
     client.post("rir-config", {
         "slot_entry": slot_entry_id, "iteration": iteration, "value": rir, "repeat": repeat,
     })
+    if weight is not None:
+        client.post("weight-config", {
+            "slot_entry": slot_entry_id, "iteration": iteration, "value": weight, "repeat": repeat,
+        })
 
 
 def make_slot_entry(client, day_id, order, exercise_id):
@@ -90,6 +94,7 @@ def make_slot_entry(client, day_id, order, exercise_id):
 
 
 def push_block_progression(client, slot_entry_id, blocks, field):
+    weight_field = f"{field}_weight"
     for bk in BLOCK_ORDER:
         if bk not in blocks:
             continue
@@ -97,7 +102,8 @@ def push_block_progression(client, slot_entry_id, blocks, field):
             cell = blocks[bk][field][wk]
             sets, reps_lo, reps_hi, rpe = parse_cell(cell)
             iteration = iteration_of(bk, wk)
-            push_set_configs(client, slot_entry_id, iteration, sets, reps_lo, reps_hi, 10 - rpe, repeat=False)
+            weight = blocks[bk].get(weight_field, {}).get(wk)
+            push_set_configs(client, slot_entry_id, iteration, sets, reps_lo, reps_hi, 10 - rpe, repeat=False, weight=weight)
 
 
 def push_flat(client, slot_entry_id, flat_cell):
@@ -153,7 +159,7 @@ def main():
             elif ex["kind"] == "work":
                 eid = make_slot_entry(client, day_id, slot_order, ex["wger_exercise_id"]); slot_order += 1
                 push_block_progression(client, eid, ex["blocks"], "work")
-            else:  # flat
+            else:
                 eid = make_slot_entry(client, day_id, slot_order, ex["wger_exercise_id"]); slot_order += 1
                 push_flat(client, eid, ex["flat"])
             print(f"    {ex['name']} ok")

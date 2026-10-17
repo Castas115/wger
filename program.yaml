@@ -1,20 +1,7 @@
-# Fuente única de verdad del programa. routine.html se genera desde este
-# archivo (scripts/render_routine.py) y wger se puebla desde este archivo
-# (scripts/import_wger_routine.py). No edites routine.html a mano.
-#
-# routine.fit_in_week=true -> cada "day" de abajo se repite 1x por semana
-# calendario, así que 1 iteration de wger = 1 semana = 1 fila Wn aquí.
-# iteration global = (block_index-1)*4 + week_index  (B1W1=1 ... B5W4=20)
-#
-# Notación celda: "sets x reps @ rpe". rpe -> RiR en wger (RiR = 10 - RPE).
-# "reps" puede ser rango "8-10" -> value/max_value en RepetitionsConfig.
-#
-# kind: main   -> dos slots (top_set + backoff), mismo ejercicio, mismo día
-# kind: work   -> un slot, progresión por bloque (campo "blocks.*.work")
-# kind: flat   -> un slot, mismo sets/reps/rpe toda la rutina (repeat=true)
-#
-# wger_exercise_id = id de "exercise" (no translation id) resuelto contra
-# https://wger.lan.home/api/v2/exercise-translation/?name=<wger_name>&language=2
+# Fuente única: routine.html y wger se generan/importan desde este archivo.
+# Celda "sets x reps @ rpe" -> wger guarda RiR (10 - rpe). iteration =
+# (block_index-1)*4 + week_index. kind: main=2 slots (top+backoff),
+# work=progresión por bloque, flat=mismo valor toda la rutina.
 
 routine:
   name: "Pull/Bench 4-Day Block"
@@ -36,12 +23,14 @@ days:
         wger_name: "Pull ups"
         wger_exercise_id: 475
         kind: main
+        bodyweight_kg: 77
+        one_rm_total_kg: 127
         blocks:
-          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" } }
-          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" } }
-          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" } }
-          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" } }
-          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" } }
+          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" }, top_set_weight: { W1: 21, W2: 23.5, W3: 26, W4: 32 }, backoff_weight: { W1: 12, W2: 13, W3: 17, W4: 23.5 } }
+          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" }, top_set_weight: { W1: 24.5, W2: 26, W3: 30, W4: 36 }, backoff_weight: { W1: 16, W2: 17, W3: 19.5, W4: 26 } }
+          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" }, top_set_weight: { W1: 27, W2: 30, W3: 32, W4: 40 }, backoff_weight: { W1: 18, W2: 19.5, W3: 22, W4: 30 } }
+          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" }, top_set_weight: { W1: 31, W2: 32, W3: 36, W4: 45 }, backoff_weight: { W1: 21, W2: 23.5, W3: 26, W4: 32 } }
+          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" }, top_set_weight: { W1: 27, W2: 32, W3: 40, W4: 50 }, backoff_weight: { W1: 21, W2: 26, W3: 32, W4: 45 } }
       - key: accessory_1
         role: accessory
         pattern: "Push · Vertical"
@@ -91,12 +80,13 @@ days:
         wger_name: "Bench Press"
         wger_exercise_id: 73
         kind: main
+        one_rm_total_kg: 100
         blocks:
-          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" } }
-          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" } }
-          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" } }
-          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" } }
-          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" } }
+          B1: { top_set: { W1: "1x5 @6.5", W2: "1x5 @7", W3: "1x5 @8", W4: "1x5 @10" }, backoff: { W1: "2x8 @6.5", W2: "3x8 @7", W3: "3x8 @8", W4: "3x8 @10" }, top_set_weight: { W1: 77, W2: 79, W3: 81, W4: 86 }, backoff_weight: { W1: 70, W2: 71, W3: 74, W4: 79 } }
+          B2: { top_set: { W1: "1x4 @6.5", W2: "1x4 @7", W3: "1x4 @8", W4: "1x4 @10" }, backoff: { W1: "2x7 @6.5", W2: "3x7 @7", W3: "3x7 @8", W4: "3x7 @10" }, top_set_weight: { W1: 80, W2: 81, W3: 84, W4: 89 }, backoff_weight: { W1: 73, W2: 74, W3: 76, W4: 81 } }
+          B3: { top_set: { W1: "1x3 @6.5", W2: "1x3 @7", W3: "1x3 @8", W4: "1x3 @10" }, backoff: { W1: "2x6 @6.5", W2: "3x6 @7", W3: "3x6 @8", W4: "3x6 @10" }, top_set_weight: { W1: 82, W2: 84, W3: 86, W4: 92 }, backoff_weight: { W1: 75, W2: 76, W3: 78, W4: 84 } }
+          B4: { top_set: { W1: "1x2 @6.5", W2: "1x2 @7", W3: "1x2 @8", W4: "1x2 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x5 @7", W3: "3x5 @8", W4: "3x5 @10" }, top_set_weight: { W1: 85, W2: 86, W3: 89, W4: 96 }, backoff_weight: { W1: 77, W2: 79, W3: 81, W4: 86 } }
+          B5: { top_set: { W1: "1x3 @6.5", W2: "1x2 @7", W3: "1x1 @8", W4: "1x1 @10" }, backoff: { W1: "2x5 @6.5", W2: "3x4 @7", W3: "3x3 @8", W4: "3x2 @10" }, top_set_weight: { W1: 82, W2: 92, W3: 92, W4: 100 }, backoff_weight: { W1: 77, W2: 81, W3: 86, W4: 96 } }
       - key: assist_1
         role: assist
         pattern: "Pull · Vertical"

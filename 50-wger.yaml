@@ -27,6 +27,15 @@ spec:
           volumeMounts:
             - { name: ca-source, mountPath: /ca-source, readOnly: true }
             - { name: ca-bundle, mountPath: /ca-bundle }
+        - name: patch-max-duration
+          image: wger/server:latest
+          command: ["sh", "-c"]
+          args:
+            - |
+              sed 's/MAX_DURATION_DAYS = 120/MAX_DURATION_DAYS = 730/' \
+                /home/wger/src/wger/manager/models/routine.py > /patched/routine.py
+          volumeMounts:
+            - { name: patched-routine, mountPath: /patched }
       containers:
         - name: web
           image: wger/server:latest
@@ -39,6 +48,7 @@ spec:
             - { name: static, mountPath: /home/wger/static }
             - { name: media, mountPath: /home/wger/media }
             - { name: ca-bundle, mountPath: /ca-bundle, readOnly: true }
+            - { name: patched-routine, mountPath: /home/wger/src/wger/manager/models/routine.py, subPath: routine.py }
           resources:
             requests: { cpu: 200m, memory: 256Mi }
             limits: { memory: 1Gi }
@@ -54,6 +64,7 @@ spec:
       volumes:
         - { name: static, emptyDir: {} }
         - { name: ca-bundle, emptyDir: {} }
+        - { name: patched-routine, emptyDir: {} }
         - name: ca-source
           configMap:
             name: wger-ca-cert

@@ -17,7 +17,7 @@ spec:
       containers:
         - name: powersync
           image: journeyapps/powersync-service:latest
-          command: ["start", "-r", "unified"]
+          args: ["start", "-r", "unified"]
           env:
             - { name: POWERSYNC_CONFIG_PATH, value: /config/powersync.yaml }
             - { name: PS_JWKS_URL, value: "http://wger/api/v2/powersync-keys" }

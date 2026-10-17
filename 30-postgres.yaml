@@ -18,8 +18,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:15-alpine
-          command:
-            - postgres
+          args:
             - -c
             - wal_level=logical
             - -c

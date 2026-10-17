@@ -18,6 +18,20 @@ spec:
       containers:
         - name: postgres
           image: postgres:15-alpine
+          command:
+            - postgres
+            - -c
+            - wal_level=logical
+            - -c
+            - shared_buffers=256MB
+            - -c
+            - effective_cache_size=768MB
+            - -c
+            - work_mem=8MB
+            - -c
+            - random_page_cost=1.1
+            - -c
+            - max_connections=30
           env:
             - { name: POSTGRES_USER, valueFrom: { configMapKeyRef: { name: wger-config, key: POSTGRES_USER } } }
             - { name: POSTGRES_DB, valueFrom: { configMapKeyRef: { name: wger-config, key: POSTGRES_DB } } }

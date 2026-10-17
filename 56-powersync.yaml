@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wger-powersync
+  namespace: wger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wger-powersync
+  template:
+    metadata:
+      labels:
+        app: wger-powersync
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: powersync
+          image: journeyapps/powersync-service:latest
+          command: ["start", "-r", "unified"]
+          env:
+            - { name: POWERSYNC_CONFIG_PATH, value: /config/powersync.yaml }
+            - { name: PS_JWKS_URL, value: "http://wger/api/v2/powersync-keys" }
+            - { name: PS_PORT, value: "8080" }
+            - { name: PS_DATABASE_URI, valueFrom: { secretKeyRef: { name: wger-secrets, key: PS_DATABASE_URI } } }
+            - { name: PS_STORAGE_PG_URI, valueFrom: { secretKeyRef: { name: wger-secrets, key: PS_STORAGE_PG_URI } } }
+          volumeMounts:
+            - { name: config, mountPath: /config, readOnly: true }
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { memory: 512Mi }
+      volumes:
+        - name: config
+          configMap:
+            name: wger-powersync-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wger-powersync
+  namespace: wger
+spec:
+  selector:
+    app: wger-powersync
+  ports:
+    - { port: 8080, targetPort: 8080 }

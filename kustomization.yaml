@@ -12,4 +12,6 @@ resources:
   - 40-nginx-conf.yaml
   - 45-ca-cert.yaml
   - 50-wger.yaml
+  - 55-powersync-config.yaml
+  - 56-powersync.yaml
   - 60-celery.yaml
